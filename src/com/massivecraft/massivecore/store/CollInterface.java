@@ -40,12 +40,6 @@ public interface CollInterface<E extends Entity<E>> extends Named, Active, Ident
 	// -------------------------------------------- //
 	
 	Collection<String> getIdsRemote();
-		
-	// -------------------------------------------- //
-	// BEHAVIOR
-	// -------------------------------------------- //
-
-	int getEntityTargetVersion();
 
 	// -------------------------------------------- //
 	// SYNC LOG

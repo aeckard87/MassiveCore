@@ -138,10 +138,6 @@ public class Coll<E extends Entity<E>> extends CollAbstract<E>
 	// BEHAVIOR
 	// -------------------------------------------- //
 	
-	// What entity version do we want?
-	protected final int entityTargetVersion;
-	@Override public int getEntityTargetVersion() { return this.entityTargetVersion; }
-	
 	// This should be false under most circumstances.
 	// In some cases such as Factions we want it though.
 	// Especially so we don't change the years old way Factions does it.
@@ -290,15 +286,15 @@ public class Coll<E extends Entity<E>> extends CollAbstract<E>
 		Long mtime = remoteEntry.getValue();
 
 		int version = MigratorUtil.getVersion(raw);
-		if (version > this.getEntityTargetVersion())
+		if (version > MigratorUtil.getTargetVersion(this.getEntityClass()))
 		{
 			logLoadError(id, String.format("Cannot load entity of entity version %d", version));
 			return;
 		}
 
 		// Migrate if another version is wanted
-		boolean migrated = MigratorUtil.migrate(this.getEntityClass(), raw, this.getEntityTargetVersion());
-
+		boolean migrated = MigratorUtil.migrate(this.getEntityClass(), raw);
+		
 		// Calculate temp but handle raw cases.
 		E temp;
 		
@@ -773,18 +769,6 @@ public class Coll<E extends Entity<E>> extends CollAbstract<E>
 		// Collections
 		this.idToEntity = new ConcurrentHashMap<>();
 		this.identifiedModifications = new ConcurrentHashMap<>();
-
-		// Migration
-		int version = 0;
-		try
-		{
-			version = ReflectionUtil.getField(this.getEntityClass(), MigratorUtil.VERSION_FIELD_NAME, this.createNewInstance());
-		}
-		catch (Exception ex)
-		{
-			// The field was not there
-		}
-		this.entityTargetVersion = version;
 		
 		// Tasks
 		this.tickTask = new Runnable()
@@ -877,7 +861,7 @@ public class Coll<E extends Entity<E>> extends CollAbstract<E>
 		// TODO: Clean up this stuff below. It branches too late.
 		if (active)
 		{
-			MigratorUtil.validateMigratorsPresent(entityClass, 0, this.getEntityTargetVersion());
+			MigratorUtil.validateMigratorsPresent(entityClass, 0, MigratorUtil.getTargetVersion(entityClass));
 
 			if (this.supportsPusher())
 			{
