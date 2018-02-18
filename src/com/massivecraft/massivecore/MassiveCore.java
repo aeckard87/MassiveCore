@@ -247,7 +247,7 @@ public class MassiveCore extends MassivePlugin
 
 		// Start the examine threads
 		// Start AFTER initializing the MConf, because they rely on the MConf.
-		ModificationPollerLocal.get().start();
+		if (ConfServer.localPollingEnabled) ModificationPollerLocal.get().start();
 		ModificationPollerRemote.get().start();
 		
 		// Delete Files (at once and additionally after all plugins loaded)
@@ -293,7 +293,7 @@ public class MassiveCore extends MassivePlugin
 	public void onDisable()
 	{
 		super.onDisable();
-		ModificationPollerLocal.get().interrupt();
+		if (ConfServer.localPollingEnabled) ModificationPollerLocal.get().interrupt();
 		ModificationPollerRemote.get().interrupt();
 		
 		MassiveCoreTaskDeleteFiles.get().run();

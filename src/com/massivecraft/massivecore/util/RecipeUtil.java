@@ -4,6 +4,7 @@ import com.massivecraft.massivecore.collections.MassiveList;
 import com.massivecraft.massivecore.predicate.Predicate;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapelessRecipe;
@@ -79,7 +80,7 @@ public class RecipeUtil
 	@SuppressWarnings("deprecation")
 	public static ShapelessRecipe createShapeless(ItemStack result, Object... objects)
 	{
-		ShapelessRecipe recipe = new ShapelessRecipe(result);
+		ShapelessRecipe recipe = new ShapelessRecipe(NamespacedKey.randomKey(), result);
 		
 		int quantity = 1;
 		int data = 0;

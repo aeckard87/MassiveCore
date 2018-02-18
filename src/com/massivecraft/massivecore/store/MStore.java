@@ -16,7 +16,7 @@ public class MStore
 	// -------------------------------------------- //
 	// This class also serves the purpose of containing database related constants.
 	
-	public static final boolean DEBUG_ENABLED = false;
+	public static final boolean DEBUG_ENABLED = true;
 	
 	// -------------------------------------------- //
 	// DRIVER REGISTRY
